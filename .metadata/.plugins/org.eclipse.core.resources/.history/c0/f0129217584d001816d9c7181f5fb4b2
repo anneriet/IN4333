@@ -1,0 +1,12 @@
+module Blocks // https://golang.org/ref/spec#Blocks
+
+imports
+
+  Statements 
+
+context-free syntax
+
+  Block.Block   = <{ <StatementList> }>
+  
+  StatementList = StatementList-Inner*
+  StatementList-Inner = <<Statement>;>

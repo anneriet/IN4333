@@ -1,0 +1,9 @@
+module test
+
+language GoLang
+
+start symbol Identifier
+
+test parse [[
+asf
+]] parse succeeds  

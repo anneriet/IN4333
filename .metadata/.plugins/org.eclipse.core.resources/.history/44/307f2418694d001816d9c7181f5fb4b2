@@ -1,0 +1,463 @@
+module statics/packages
+
+imports
+  signatures/nabl2/shared/-
+  signatures/nabl2/shared/common/-
+  signatures/nabl2/shared/constraints/-
+  nabl2/shared/-
+  signatures/nabl2/runtime/-
+  signatures/nabl2/runtime/analysis/-
+  signatures/nabl2/runtime/common/-
+  signatures/nabl2/runtime/constraints/-
+  nabl2/runtime/-
+  nabl2/runtime/analysis/-
+  nabl2/runtime/prelude/-
+  nabl2/runtime/stdlib/-
+
+
+rules
+
+
+rules
+
+
+rules
+
+
+rules
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(SourceFile(
+            pkg_path
+          , PackageClause(PackageName(pkg_name))
+          , imports
+          , decls
+          ) := nabl2_term)
+    with(Params(nabl2_params@(s_univ)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s_univ)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "SourceFile(\n  pkg_path\n, PackageClause(PackageName(pkg_name))\n, imports\n, decls\n)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(s_pkg_pub := <nabl2--new-scope(|nabl2_source)
+                       ; try(nabl2--copy-origin(|nabl2_term))> "s_pkg_pub"
+         ; s_pkg_prv := <nabl2--new-scope(|nabl2_source)
+                         ; try(nabl2--copy-origin(|nabl2_term))> "s_pkg_prv"
+         ; s_file := <nabl2--new-scope(|nabl2_source)
+                      ; try(nabl2--copy-origin(|nabl2_term))> "s_file"
+         ; id)
+    with(s_pkg_imp := <nabl2--new-scope(|nabl2_source)
+                       ; try(nabl2--copy-origin(|nabl2_term))> "s_pkg_imp"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CGDirectEdge(
+                                                                s_pkg_pub
+                                                              , P()
+                                                              , s_univ
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGDirectEdge(
+                                                                s_pkg_prv
+                                                              , P()
+                                                              , s_pkg_pub
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGDirectEdge(
+                                                                s_file
+                                                              , P()
+                                                              , s_pkg_prv
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGDecl(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , s_univ
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGAssoc(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , Label("PUB")
+                                                              , s_pkg_pub
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGAssoc(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , Label("PRV")
+                                                              , s_pkg_pub
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGRef(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , s_univ
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGNamedEdge(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , Label("PRV")
+                                                              , s_pkg_prv
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGAssoc(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , Label("IMP")
+                                                              , s_pkg_imp
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGDecl(
+                                                                Occurrence(
+                                                                  Namespace("Pkg")
+                                                                , pkg_name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_name
+                                                                )
+                                                              , s_pkg_imp
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGAssoc(
+                                                                Occurrence(
+                                                                  Namespace("Pkg")
+                                                                , pkg_name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_name
+                                                                )
+                                                              , Label("PUB")
+                                                              , s_pkg_pub
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-Map2-rule|"Map2")> (nabl2_source, imports, Params((s_univ, s_file)))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-Map2-rule|"Map2")> (nabl2_source, decls, Params((s_pkg_pub, s_file)))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(MultiImportDecl(import_specs) := nabl2_term)
+    with(Params(nabl2_params@(s_univ, s_file)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s_univ, s_file)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "MultiImportDecl(import_specs)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ <nabl2--generate-constraint(nabl2--generate-constraint-Map2-rule|"Map2")> (nabl2_source, import_specs, Params((s_univ, s_file)))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(ImportSpec(Qual(), pkg_path) := nabl2_term)
+    with(Params(nabl2_params@(s_univ, s_file)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s_univ, s_file)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "ImportSpec(Qual(), pkg_path)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CGRef(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , s_univ
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGNamedEdge(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , Label("IMP")
+                                                              , s_file
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(ImportSpec(Unqual(), pkg_path) := nabl2_term)
+    with(Params(nabl2_params@(s_univ, s_file)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s_univ, s_file)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "ImportSpec(Unqual(), pkg_path)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CGRef(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , s_univ
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGNamedEdge(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , Label("PUB")
+                                                              , s_file
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(ImportSpec(Alias(PackageName("_")), pkg_path) := nabl2_term)
+    with(Params(nabl2_params@(s_univ, s_file)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s_univ, s_file)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "ImportSpec(Alias(PackageName(\"_\")), pkg_path)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> (nabl2_metadata, [CTrue(<nabl2--get-ast-index> nabl2_term)]))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(ImportSpec(Alias(PackageName(pkg_name)), pkg_path) := nabl2_term)
+    with(Params(nabl2_params@(s_univ, s_file)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s_univ, s_file)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "ImportSpec(Alias(PackageName(pkg_name)), pkg_path)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(s_imp := <nabl2--new-scope(|nabl2_source)
+                   ; try(nabl2--copy-origin(|nabl2_term))> "s_imp"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CGDecl(
+                                                                Occurrence(
+                                                                  Namespace("Pkg")
+                                                                , pkg_name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_name
+                                                                )
+                                                              , s_file
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGAssoc(
+                                                                Occurrence(
+                                                                  Namespace("Pkg")
+                                                                , pkg_name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_name
+                                                                )
+                                                              , Label("PUB")
+                                                              , s_imp
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGRef(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , s_univ
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGNamedEdge(
+                                                                Occurrence(
+                                                                  Namespace("PkgPath")
+                                                                , pkg_path
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg_path
+                                                                )
+                                                              , Label("PUB")
+                                                              , s_imp
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(TestSources(sourcefiles) := nabl2_term)
+    with(Params(nabl2_params@(s_univ)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s_univ)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "TestSources(sourcefiles)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ <nabl2--generate-constraint(nabl2--generate-constraint-Map1-rule|"Map1")> (nabl2_source, sourcefiles, Params((s_univ)))
+                                                            ]
+                                                          ))

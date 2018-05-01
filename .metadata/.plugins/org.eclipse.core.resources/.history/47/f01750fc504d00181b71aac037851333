@@ -1,0 +1,9 @@
+module test
+
+language GoLang
+
+start symbol Identifier
+
+
+test parseempty [[ ]] parse succeeds 
+test parse [[a]] parse succeeds   

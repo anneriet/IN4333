@@ -1,0 +1,6 @@
+module test
+
+language GoLang
+
+test parse [[
+]] parse succeeds  

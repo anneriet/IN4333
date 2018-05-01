@@ -1,0 +1,2211 @@
+module statics/expressions
+
+imports
+  signatures/nabl2/shared/-
+  signatures/nabl2/shared/common/-
+  signatures/nabl2/shared/constraints/-
+  nabl2/shared/-
+  signatures/nabl2/runtime/-
+  signatures/nabl2/runtime/analysis/-
+  signatures/nabl2/runtime/common/-
+  signatures/nabl2/runtime/constraints/-
+  nabl2/runtime/-
+  nabl2/runtime/analysis/-
+  nabl2/runtime/prelude/-
+  nabl2/runtime/stdlib/-
+
+
+rules
+
+
+rules
+
+
+rules
+
+
+rules
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(IntLit(nabl2_wld1) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "IntLit(nabl2_wld1)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld2
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(FloatLit(nabl2_wld1) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "FloatLit(nabl2_wld1)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld2
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(ImaginaryLit(nabl2_wld1) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "ImaginaryLit(nabl2_wld1)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld2
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(RuneLit(nabl2_wld1) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "RuneLit(nabl2_wld1)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld2
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(StringLit(nabl2_wld1) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "StringLit(nabl2_wld1)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , StringT()
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(OperandName(name) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "OperandName(name)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(d := <nabl2--new-var(|nabl2_source)
+               ; try(nabl2--copy-origin(|nabl2_term))> "d"
+         ; ty := <nabl2--new-var(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , CGRef(
+                                                                Occurrence(
+                                                                  Namespace("Var")
+                                                                , name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> name
+                                                                )
+                                                              , s
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CResolve(
+                                                                Occurrence(
+                                                                  Namespace("Var")
+                                                                , name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> name
+                                                                )
+                                                              , d
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , CDeclProperty(
+                                                                d
+                                                              , Type()
+                                                              , ty
+                                                              , ""
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(QualifiedOperandName(QualifiedIdent(PackageName(pkg), name)) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "QualifiedOperandName(QualifiedIdent(PackageName(pkg), name))"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(d := <nabl2--new-var(|nabl2_source)
+               ; try(nabl2--copy-origin(|nabl2_term))> "d"
+         ; ty := <nabl2--new-var(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; id)
+    with(s_qual := <nabl2--new-scope(|nabl2_source)
+                    ; try(nabl2--copy-origin(|nabl2_term))> "s_qual"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , CGRef(
+                                                                Occurrence(
+                                                                  Namespace("Pkg")
+                                                                , pkg
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg
+                                                                )
+                                                              , s
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGNamedEdge(
+                                                                Occurrence(
+                                                                  Namespace("Pkg")
+                                                                , pkg
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> pkg
+                                                                )
+                                                              , Label("PUB")
+                                                              , s_qual
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CGRef(
+                                                                Occurrence(
+                                                                  Namespace("Var")
+                                                                , name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> name
+                                                                )
+                                                              , s_qual
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , CResolve(
+                                                                Occurrence(
+                                                                  Namespace("Var")
+                                                                , name
+                                                                , <nabl2--occurrence-index-of(|nabl2_index)> name
+                                                                )
+                                                              , d
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , CDeclProperty(
+                                                                d
+                                                              , Type()
+                                                              , ty
+                                                              , ""
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(CompositeLit(type, value) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "CompositeLit(type, value)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty := <nabl2--new-var(|nabl2_source)
+                ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; id)
+    with(s_ty := <nabl2--new-scope(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "s_ty"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> ( nabl2_source
+                                                                                                                                              , type
+                                                                                                                                              , ParamsAndType((s, s_ty), ty)
+                                                                                                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, value, ParamsAndType((s), nabl2_wld1))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(AutoArrayType(type) := nabl2_term)
+    with(Params(nabl2_params@(s)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "AutoArrayType(type)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty := <nabl2--new-var(|nabl2_source)
+                ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; id)
+    with(s_ty := <nabl2--new-scope(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "s_ty"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> ( nabl2_source
+                                                                                                                                              , type
+                                                                                                                                              , ParamsAndType((s, s_ty), ty)
+                                                                                                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(LiteralValue(elems) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "LiteralValue(elems)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty := <nabl2--new-var(|nabl2_source)
+                ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-Map1-rule|"Map1")> (nabl2_source, elems, Params((s)))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(KeyedElement(key, elem) := nabl2_term)
+    with(Params(nabl2_params@(s)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "KeyedElement(key, elem)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty := <nabl2--new-var(|nabl2_source)
+                ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, key, Params((s)))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, elem, ParamsAndType((s), ty))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(NoKey() := nabl2_term)
+    with(Params(nabl2_params@(s)) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s)"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "NoKey()"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [CAstProperty(nabl2_index, Params(), nabl2_params)])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> (nabl2_metadata, []))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(FunctionLit(fun) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "FunctionLit(fun)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty := <nabl2--new-var(|nabl2_source)
+                ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, fun, Params((s)))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Selector(expr, name) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Selector(expr, name)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty_e := <nabl2--new-var(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "ty_e"
+         ; d_ty := <nabl2--new-var(|nabl2_source)
+                    ; try(nabl2--copy-origin(|nabl2_term))> "d_ty"
+         ; s_ty := <nabl2--new-var(|nabl2_source)
+                    ; try(nabl2--copy-origin(|nabl2_term))> "s_ty"
+         ; ty := <nabl2--new-var(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; id)
+    with(s_fld := <nabl2--new-scope(|nabl2_source)
+                   ; try(nabl2--copy-origin(|nabl2_term))> "s_fld"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), ty_e))
+                                                            , CEqual(
+                                                                ty_e
+                                                              , NamedT(d_ty)
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , CAssoc(
+                                                                d_ty
+                                                              , Label("FM")
+                                                              , s_ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , CGDirectEdge(
+                                                                s_fld
+                                                              , P()
+                                                              , s_ty
+                                                              , <nabl2--get-ast-index> nabl2_term
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-VarRef-rule|"VarRef")> (nabl2_source, name, ParamsAndType((s_fld), ty))
+                                                            , CFalse(
+                                                                Message(Note(), "TODO: Selector/2", <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Arguments(expr, args) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Arguments(expr, args)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty_params := <nabl2--new-var(|nabl2_source)
+                       ; try(nabl2--copy-origin(|nabl2_term))> "ty_params"
+         ; ty := <nabl2--new-var(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; ty_args := <nabl2--new-var(|nabl2_source)
+                       ; try(nabl2--copy-origin(|nabl2_term))> "ty_args"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> ( nabl2_source
+                                                                                                                                              , expr
+                                                                                                                                              , ParamsAndType((s), FunT(ty_params, ty))
+                                                                                                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-Map1T-rule|"Map1T")> (nabl2_source, args, ParamsAndType((s), ty_args))
+                                                            , CFalse(
+                                                                Message(Note(), "TODO: Arguments/2", <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(LogicalOr(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "LogicalOr(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(LogicalAnd(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "LogicalAnd(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Equal(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Equal(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(NotEqual(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "NotEqual(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Less(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Less(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(LessOrEqual(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "LessOrEqual(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Greater(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Greater(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(GreaterOrEqual(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "GreaterOrEqual(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Sum(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Sum(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Difference(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Difference(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(BitwiseOr(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "BitwiseOr(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(BitwiseXor(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "BitwiseXor(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Product(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Product(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Quotient(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Quotient(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Remainder(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Remainder(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(LeftShift(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "LeftShift(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(RightShift(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "RightShift(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(BitwiseAnd(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "BitwiseAnd(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(BitClear(expr1, expr2) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "BitClear(expr1, expr2)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; nabl2_wld3 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld3"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr1, ParamsAndType((s), nabl2_wld2))
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr2, ParamsAndType((s), nabl2_wld3))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Positive(expr) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Positive(expr)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Negation(expr) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Negation(expr)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Not(expr) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Not(expr)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(BitwiseComplement(expr) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "BitwiseComplement(expr)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(AddressOf(expr) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "AddressOf(expr)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(ValueAt(expr) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "ValueAt(expr)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Recieve(expr) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Recieve(expr)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(nabl2_wld1 := <nabl2--new-var(|nabl2_source)
+                        ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld1"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , nabl2_wld1
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))
+
+  nabl2--generate-constraint-default-rule(|):
+    _ -> nabl2_constraint
+    with(?(nabl2_source, nabl2_term, nabl2_args))
+    where(Conversion(type, expr, nabl2_wld1) := nabl2_term)
+    with(ParamsAndType(nabl2_params@(s), nabl2_type@nabl2_type) := nabl2_args
+         <+ fatal-err(
+            | <concat-strings> [ "Cannot match expected "
+                               , "^ (s) : nabl2_type"
+                               , " with actual "
+                               , <nabl2--pp-flat-args> nabl2_args
+                               , " when matching "
+                               , "Conversion(type, expr, nabl2_wld1)"
+                               , " with "
+                               , <pp-NaBL2-Term> nabl2_term
+                               , "."
+                               ]
+            ))
+    with(if nabl2--is-debug-collection-enabled then
+           nabl2--collection-info-msg(
+           | <concat-strings> [ "default"
+                              , " [[ "
+                              , <pp-NaBL2-Term> nabl2_term
+                              , " ^ "
+                              , <pp-NaBL2-CTerm> nabl2_params
+                              , " : "
+                              , <pp-NaBL2-objlangterm> nabl2_type
+                              , " ]]"
+                              ]
+           )
+         end)
+    with(ty := <nabl2--new-var(|nabl2_source)
+                ; try(nabl2--copy-origin(|nabl2_term))> "ty"
+         ; nabl2_wld2 := <nabl2--new-var(|nabl2_source)
+                          ; try(nabl2--copy-origin(|nabl2_term))> "nabl2_wld2"
+         ; id)
+    with(s_ty := <nabl2--new-scope(|nabl2_source)
+                  ; try(nabl2--copy-origin(|nabl2_term))> "s_ty"
+         ; id)
+    with(nabl2_index := <nabl2--get-ast-index> nabl2_term
+         ; nabl2_metadata := [ CAstProperty(nabl2_index, Params(), nabl2_params)
+                             , CAstProperty(nabl2_index, Type(), nabl2_type)
+                             ])
+    with(nabl2_constraint := <conc ; nabl2--flatten-list> ( nabl2_metadata
+                                                          , [ CEqual(
+                                                                nabl2_type
+                                                              , ty
+                                                              , Message(Error(), Default(), <nabl2--get-ast-index> nabl2_term)
+                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> ( nabl2_source
+                                                                                                                                              , type
+                                                                                                                                              , ParamsAndType((s, s_ty), ty)
+                                                                                                                                              )
+                                                            , <nabl2--generate-constraint(nabl2--generate-constraint-default-rule|"default")> (nabl2_source, expr, ParamsAndType((s), nabl2_wld2))
+                                                            ]
+                                                          ))

@@ -1,0 +1,68 @@
+module Packages // https://golang.org/ref/spec#Packages
+
+imports
+
+  Declarations
+  Lexical
+
+context-free start-symbols
+
+  SourceFile
+  TestSources
+
+/**
+ * Source file -- https://golang.org/ref/spec#Source_file_organization
+ */
+
+  context-free syntax
+
+  SourceFile.SourceFile = <
+    <PackageClause>;
+
+    <SourceFile-Imports*>
+
+    <SourceFile-Decls*>
+  >
+  SourceFile-Imports = <<ImportDecl>;>
+  SourceFile-Decls   = <<TopLevelDecl>;>
+
+/**
+ * Package clause -- https://golang.org/ref/spec#Package_clause
+ */
+ 
+  context-free syntax
+
+  PackageClause.PackageClause = <package <PackageName>>
+  PackageName.PackageName     = Identifier
+
+/**
+ * Import declarations -- https://golang.org/ref/spec#Import_declarations
+ */
+ 
+  context-free syntax
+
+  ImportDecl.SingleImportDecl = <import <ImportSpec>>
+  ImportDecl.MultiImportDecl  = <import (<MultiImportDecl-Inner*>)>
+  MultiImportDecl-Inner       = <<ImportSpec>;>
+
+  ImportSpec.ImportSpec  = <<ImportSpec-Qual> <ImportPath>>
+  ImportSpec-Qual.Qual   = <>
+  ImportSpec-Qual.Unqual = <.>
+  ImportSpec-Qual.Alias  = PackageName
+  ImportPath             = StringLit
+
+/**
+ * Source files for testing
+ */
+
+  context-free syntax
+  
+  TestSources.TestSources = TestSource*
+
+  TestSource.SourceFile = <
+    [<ImportPath>]
+    <PackageClause>;
+
+    <SourceFile-Imports*>
+    <SourceFile-Decls*>
+  >

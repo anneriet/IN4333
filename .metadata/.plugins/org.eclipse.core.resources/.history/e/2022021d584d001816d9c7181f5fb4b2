@@ -1,0 +1,12 @@
+module GoLang
+
+imports
+  
+  Blocks
+  Declarations
+  Expressions
+  Lexical
+  Packages
+  Representation
+  Statements
+  Types

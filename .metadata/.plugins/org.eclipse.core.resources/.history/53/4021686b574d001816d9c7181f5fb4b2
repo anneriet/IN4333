@@ -1,0 +1,8 @@
+module Identifier
+
+language GoLang
+
+start symbol Identifier
+
+test single_letter_identifier [[a]] parse succeeds
+ 
